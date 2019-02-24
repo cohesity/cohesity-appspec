@@ -5,7 +5,7 @@
 package main
 
 import (
-  "github.com/cohesity-apps-dev-tools/viewbrowser/server"
+  "github.com/cohesity/cohesity-apps-dev-tools/viewbrowser/server"
   "flag"
 )
 
