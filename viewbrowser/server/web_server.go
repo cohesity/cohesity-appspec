@@ -136,7 +136,7 @@ func browseFiles(absoluteDirPath string) (*data.ReadDirResult, error) {
 
 func (fs *FileBrowserServer) GetViewsHandler(resp http.ResponseWriter,
   req *http.Request) {
-
+  
   // Get management token to make iris calls.Retry incase of failure.
   var managementAccessToken managementModels.AccessToken
  for i :=0 ;i<=kRetry ; i++ {
@@ -162,7 +162,7 @@ func (fs *FileBrowserServer) GetViewsHandler(resp http.ResponseWriter,
   var maxCount, maxViewId *int64
   var viewBoxIds, jobIds []int64
 
-  viewsResult, err = managementClient.Views().GetViews(viewNames, viewBoxNames,
+  viewsResult, err := managementClient.Views().GetViews(viewNames, viewBoxNames,
     matchPartialNames, maxCount, maxViewId, includeInactive, tenantIds,
       allUnderHierarchy, viewBoxIds, jobIds, sortByLogicalUsage, matchAliasNames)
   if err != nil {
