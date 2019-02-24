@@ -1,10 +1,7 @@
 // Copyright 2019 Cohesity Inc.
 //
-// Author: Abhilash Velalam
-//
-// View browser web server that expose apis to 
-// get views from the app and browse the files
-// and folders inside the view.
+// View browser web server that expose apis to get views from the app 
+// and browse the files and folders inside the view.
 
 package viewbrowserserver
 
@@ -21,9 +18,10 @@ import (
   appModels "github.com/cohesity/app-sdk-go/models"
   ManagementSdk "github.com/cohesity/management-sdk-go/managementsdk"
   managementModels "github.com/cohesity/management-sdk-go/models"
+
   "github.com/go-martini/martini"
   "github.com/golang/glog"
-  "github.com/cohesity/cohesity-apps-dev-tools/viewbrowser/data"
+  "github.com/cohesity/cohesity-app-spec/viewbrowser/data"
 )
 
 var (
@@ -51,6 +49,7 @@ type FileBrowserServer struct {
 const (
   kBrowseFileHandlerApi string = "/views/:viewname/dir"
   kCohesityMountPath    string = "/cohesity/mount"
+  kRetry                int    = 3
 
   // Constants for file types.
   kFile      string = "kFile"
@@ -138,17 +137,20 @@ func browseFiles(absoluteDirPath string) (*data.ReadDirResult, error) {
 func (fs *FileBrowserServer) GetViewsHandler(resp http.ResponseWriter,
   req *http.Request) {
 
-  // Get management token to make iris calls.
-  managementTokenResponse, err := appClient.TokenManagement().CreateManagementAccessToken()
-  if err != nil {
-    glog.Errorf(fmt.Sprint(err))
-    resp.WriteHeader(http.StatusBadRequest)
-    return
-  }
+  // Get management token to make iris calls.Retry incase of failure.
   var managementAccessToken managementModels.AccessToken
-
-  managementAccessToken.AccessToken = managementTokenResponse.AccessToken
-  managementAccessToken.TokenType = managementTokenResponse.TokenType
+ for i :=0 ;i<=kRetry ; i++ {
+   managementTokenResponse, err := appClient.TokenManagement().CreateManagementAccessToken()
+    if err ==nil {
+      managementAccessToken.AccessToken = managementTokenResponse.AccessToken
+      managementAccessToken.TokenType = managementTokenResponse.TokenType
+      break
+     }
+    if i == kRetry {
+      glog.Errorf(fmt.Sprint(err))
+      resp.WriteHeader(http.StatusBadRequest)
+    }
+  }
 
   // Setting management token to initialize management client.
   managementClient = ManagementSdk.NewCohesityClientWithToken(apiEndpointIp, &managementAccessToken)

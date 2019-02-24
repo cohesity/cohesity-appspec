@@ -1,16 +1,13 @@
 // Copyright 2019 Cohesity Inc.
 //
-// Author: Abhilash Velalam
 
 package main
 
 import (
-  "github.com/cohesity/cohesity-apps-dev-tools/viewbrowser/server"
-  "flag"
+  "github.com/cohesity/cohesity-app-spec/viewbrowser/server"
 )
 
 func main() {
-  flag.Parse()
   rs := viewbrowserserver.NewFileBrowserServer()
   rs.Start()
 }

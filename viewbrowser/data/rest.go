@@ -1,7 +1,5 @@
 // Copyright 2019 Cohesity Inc.
 //
-// Author: Abhilash velalam
-
 // This file defines the json objects and structs implementing the
 // filebrowser's Restful API exposed to the apps.
 
