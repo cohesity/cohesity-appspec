@@ -1,9 +1,9 @@
 // Copyright 2019 Cohesity Inc.
 //
-// View browser web server that expose apis to get views from the app 
-// and browse the files and folders inside the view.
+// View browser web server that exposes apis to get views from the app,
+// list the views and browse the files and folders inside the view.
 
-package viewbrowserserver
+package viewbrowser
 
 import (
   "encoding/json"
@@ -14,52 +14,59 @@ import (
   "path/filepath"
   "sync"
 
-  CohesityAppSdk "github.com/cohesity/app-sdk-go/appsdk"
+  "github.com/cohesity/app-sdk-go/appsdk"
   appModels "github.com/cohesity/app-sdk-go/models"
-  ManagementSdk "github.com/cohesity/management-sdk-go/managementsdk"
+  "github.com/cohesity/management-sdk-go/managementsdk"
   managementModels "github.com/cohesity/management-sdk-go/models"
-
   "github.com/go-martini/martini"
   "github.com/golang/glog"
   "github.com/cohesity/cohesity-app-spec/viewbrowser/data"
 )
 
 var (
+  // Authentication token for the app to authenticate with the service.
   appAuthenticationToken string
-  apiEndpointIp          string
-  apiEndpointPort        string
-  appClient              CohesityAppSdk.COHESITYAPPSDK
-  managementClient       ManagementSdk.COHESITYMANAGEMENTSDK
+
+  // Ip address of the host the container is running on.
+  hostIp string
+
+  // Ip address of the  API endpoint.
+  apiEndpointIp string
+
+  // Port of the API endpoint
+  apiEndpointPort string
+
+  // Client to access cohesity AppSdk
+  appClient CohesityAppSdk.COHESITYAPPSDK
 )
 
 func init() {
+  hostIp = os.Getenv("HOST_IP")
+
   apiEndpointIp = os.Getenv("APPS_API_ENDPOINT_IP")
+
   apiEndpointPort = os.Getenv("APPS_API_ENDPOINT_PORT")
+
   appAuthenticationToken = os.Getenv("APP_AUTHENTICATION_TOKEN")
 }
 
-type FileBrowserServer struct {
+type ViewBrowserServer struct {
   // Port on which the HTTP server will listen.
   httpPort int
 
-  // The Martini server.
+  // The Martini HTTP server.
   martiniServer *martini.ClassicMartini
 }
 
 const (
-  kBrowseFileHandlerApi string = "/views/:viewname/dir"
+  kBrowseFileHandlerApi string = "/views/:viewname"
   kCohesityMountPath    string = "/cohesity/mount"
   kRetry                int    = 3
-
-  // Constants for file types.
-  kFile      string = "kFile"
-  kDirectory string = "kDirectory"
-  kSymlink   string = "kSymlink"
 )
 
 // NewFileBrowserServer creates new instance of filebrowser server.
-func NewFileBrowserServer() *FileBrowserServer {
-  ws := &FileBrowserServer{httpPort: 25695}
+func NewViewBrowserServer() *ViewBrowserServer {
+  ws := &ViewBrowserServer{httpPort: 8080}
 
   // Set up the http handlers.
   wr := martini.NewRouter()
@@ -78,7 +85,7 @@ func NewFileBrowserServer() *FileBrowserServer {
   return ws
 }
 
-func (fs *FileBrowserServer) Start() {
+func (fs *ViewBrowserServer) Start() {
   // Initializing appclient before starting the server.
   appClient = CohesityAppSdk.NewAppSdkClient(
     appAuthenticationToken, apiEndpointIp, apiEndpointPort)
@@ -88,7 +95,7 @@ func (fs *FileBrowserServer) Start() {
   wg.Wait()
 }
 
-func (fs *FileBrowserServer) startServer() {
+func (fs *ViewBrowserServer) startServer() {
   endpt := fmt.Sprintf(":%v", fs.httpPort)
   glog.Infof("Listening on %v", endpt)
   if err := http.ListenAndServe(endpt, fs.martiniServer); err != nil {
@@ -98,9 +105,9 @@ func (fs *FileBrowserServer) startServer() {
 }
 
 func dirExists(dirPath string) bool {
-  if fi, err := os.Stat(dirPath); err == nil {
+  if fileInfo, err := os.Stat(dirPath); err == nil {
     // Check if the file at the given path is a directory or not.
-    return fi.Mode().IsDir()
+    return fileInfo.Mode().IsDir()
   }
   return false
 }
@@ -122,38 +129,44 @@ func browseFiles(absoluteDirPath string) (*data.ReadDirResult, error) {
     dirEntry.FilePath = filepath.Join(absoluteDirPath, file.Name())
     dirEntry.Size = file.Size()
     if file.IsDir() {
-      dirEntry.Type = kDirectory
+      dirEntry.Type = "kDirectory"
     } else if !file.Mode().IsRegular() {
-      dirEntry.Type = kSymlink
+      dirEntry.Type = "kSymlink"
     } else {
-      dirEntry.Type = kFile
+      dirEntry.Type = "kFile"
     }
-    glog.Infoln("Entry under "+absoluteDirPath+": %+v\n", *dirEntry)
+    glog.Infoln("Adding entry to read directory under: "+absoluteDirPath+
+      " with properties: %+v\n", *dirEntry)
     readDirResult.Entries = append(readDirResult.Entries, dirEntry)
   }
   return readDirResult, nil
 }
 
-func (fs *FileBrowserServer) GetViewsHandler(resp http.ResponseWriter,
+func (fs *ViewBrowserServer) GetViewsHandler(resp http.ResponseWriter,
   req *http.Request) {
-  
+
   // Get management token to make iris calls.Retry incase of failure.
+  // management token is only valid for 24 hours.
   var managementAccessToken managementModels.AccessToken
- for i :=0 ;i<=kRetry ; i++ {
-   managementTokenResponse, err := appClient.TokenManagement().CreateManagementAccessToken()
-    if err ==nil {
-      managementAccessToken.AccessToken = managementTokenResponse.AccessToken
-      managementAccessToken.TokenType = managementTokenResponse.TokenType
+  for i := 0; i <= kRetry; i++ {
+    managementTokenResponse, err := appClient.TokenManagement().CreateManagementAccessToken()
+    if err != nil {
+      if i == kRetry {
+        glog.Errorf(fmt.Sprint(err))
+        resp.WriteHeader(http.StatusBadRequest)
+        return
+      }
+    } else {
+      managementAccessToken = managementModels.AccessToken{
+        AccessToken: managementTokenResponse.AccessToken,
+        TokenType:   managementTokenResponse.TokenType,
+      }
       break
-     }
-    if i == kRetry {
-      glog.Errorf(fmt.Sprint(err))
-      resp.WriteHeader(http.StatusBadRequest)
     }
   }
 
   // Setting management token to initialize management client.
-  managementClient = ManagementSdk.NewCohesityClientWithToken(apiEndpointIp, &managementAccessToken)
+  managementClient := CohesityManagementSdk.NewCohesityClientWithToken(hostIp, &managementAccessToken)
 
   var viewsResult *managementModels.GetViewsResult
   var viewNames, viewBoxNames, tenantIds []string
@@ -164,25 +177,26 @@ func (fs *FileBrowserServer) GetViewsHandler(resp http.ResponseWriter,
 
   viewsResult, err := managementClient.Views().GetViews(viewNames, viewBoxNames,
     matchPartialNames, maxCount, maxViewId, includeInactive, tenantIds,
-      allUnderHierarchy, viewBoxIds, jobIds, sortByLogicalUsage, matchAliasNames)
+    allUnderHierarchy, viewBoxIds, jobIds, sortByLogicalUsage, matchAliasNames)
   if err != nil {
     glog.Errorf(fmt.Sprint(err))
     resp.WriteHeader(http.StatusInternalServerError)
     return
   }
-  Clusterviews := viewsResult.Views
-  ClusterViewIDMap := make(map[int]string)
+  clusterViews := viewsResult.Views
+  clusterViewIDMap := make(map[int]string)
 
   // ClusterViewsInfo gives information about all the views in a cluster.
-  var clusterViewsInfo data.ClusterViewsInfo
+  var clusterViewsInfo data.ViewsInformation
   var viewsInfo []*data.ViewInfo
 
   // Iterating over cluster views and storing viewname and id in a map.
-  for _, view := range Clusterviews {
-    ClusterViewIDMap[int(*view.ViewId)] = *view.Name
-    var viewInfo data.ViewInfo
-    viewInfo.ViewName = *view.Name
-    viewInfo.ViewId = int(*view.ViewId)
+  for _, view := range clusterViews {
+    clusterViewIDMap[int(*view.ViewId)] = *view.Name
+    viewInfo := data.ViewInfo{
+      ViewName: *view.Name,
+      ViewId:   int(*view.ViewId),
+    }
     viewsInfo = append(viewsInfo, &viewInfo)
   }
 
@@ -197,8 +211,11 @@ func (fs *FileBrowserServer) GetViewsHandler(resp http.ResponseWriter,
   }
 
   // appViewsInfo gives information about views acecssible by the app.
-  var appViewsInfo data.AppViewsInfo
+  var appViewsInfo data.ViewsInformation
   viewsInfo = viewsInfo[:0]
+
+  // appInstanceSettings give information about the views accessible by the app
+  // and their privileges.
 
   appInstanceSettings := appSettings.AppInstanceSettings
 
@@ -208,7 +225,7 @@ func (fs *FileBrowserServer) GetViewsHandler(resp http.ResponseWriter,
     viewIds := appInstanceSettings.ReadViewPrivileges.ViewIds
     for _, viewId := range *viewIds {
       var viewInfo data.ViewInfo
-      viewInfo.ViewName = ClusterViewIDMap[int(viewId)]
+      viewInfo.ViewName = clusterViewIDMap[int(viewId)]
       viewInfo.ViewId = int(viewId)
       viewsInfo = append(viewsInfo, &viewInfo)
     }
@@ -222,7 +239,10 @@ func (fs *FileBrowserServer) GetViewsHandler(resp http.ResponseWriter,
   return
 }
 
-func (fs *FileBrowserServer) BrowseFilesHandler(pathParams martini.Params,
+// Gets the view name from the url, creates a directory, mount the view
+// on the directory created, get the directories information inside the view
+// and unmounts the view.
+func (fs *ViewBrowserServer) BrowseFilesHandler(pathParams martini.Params,
   resp http.ResponseWriter, req *http.Request) {
 
   viewName := pathParams["viewname"]
@@ -233,30 +253,33 @@ func (fs *FileBrowserServer) BrowseFilesHandler(pathParams martini.Params,
     http.Error(resp, errMsg, http.StatusBadRequest)
   }
 
+  // Name of the directory that is to be created and to be mounted the view on.
   dirName := viewName + "_dir"
-  var optPtr = new(string)
-  *optPtr = "ro"
+  options := "ro"
+
+  // Options to be specified for the mount api.
   mountOptions := appModels.MountOptions{
     ViewName:      viewName,
     DirName:       dirName,
     MountProtocol: appModels.MountProtocol_KNFS,
-    MountOptions:  optPtr,
+    MountOptions:  &options,
   }
 
+  // Api to mount the view.
   err := appClient.Mount().CreateMount(&mountOptions)
-
   if err != nil {
     glog.Errorf(fmt.Sprint(err))
-    resp.WriteHeader(http.StatusInternalServerError)
+    resp.WriteHeader(http.StatusBadRequest)
     return
   }
 
-  // Unmount after the successful/unsuccessful operation.
+  // Try to unmount after the handler exists irrespective of whether
+  // the rest of the op was successful.
   defer func() {
+    // Api to unmount the view.
     if err := appClient.Mount().DeleteUnmount(dirName); err != nil {
       errMsg := "Unmount failed with error: " + err.Error()
       glog.Errorln(errMsg)
-      return
     }
   }()
 
@@ -264,7 +287,7 @@ func (fs *FileBrowserServer) BrowseFilesHandler(pathParams martini.Params,
   absoluteDirPath := filepath.Join(kCohesityMountPath, dirName)
   readDirResult, err := browseFiles(absoluteDirPath)
   if err != nil {
-    errMsg := "Directory " + dirName + " does not exisit inside the " +
+    errMsg := "Directory " + dirName + " does not exist inside the " +
       "view " + viewName
     glog.Errorln(errMsg)
     http.Error(resp, errMsg, http.StatusBadRequest)
@@ -272,8 +295,9 @@ func (fs *FileBrowserServer) BrowseFilesHandler(pathParams martini.Params,
 
   dataBuffer, err := json.MarshalIndent(readDirResult, "", " ")
   if err != nil {
-    glog.Errorln("Error in marshalling read Dir result.")
+    glog.Errorln("Error in marshalling readDirresult.")
     resp.WriteHeader(http.StatusInternalServerError)
+    return
   }
   resp.WriteHeader(http.StatusOK)
   resp.Write(dataBuffer)

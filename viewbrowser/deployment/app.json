@@ -1,0 +1,14 @@
+// Copyright 2019 Cohesity Inc.
+
+{
+ "id": 1,
+ "name" : "View-browser",
+ "version" : 1,
+ "dev_version": 1.0,
+ "description" : "Viewbrowser: Browse the files inside a view",
+ "access_requirements" : {
+    "read_access" : true,
+    "read_write_access" : false,
+    "management_access" : true
+ }
+}

@@ -1,3 +1,5 @@
+// Copyright 2019 Cohesity Inc.
+
 FROM centos:centos7
 
 WORKDIR /opt/viewbrowser/bin

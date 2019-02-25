@@ -1,0 +1,41 @@
+# Copyright 2019 Cohesity Inc.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: view-browser-rest
+  labels:
+    app: view-browser
+spec:
+  type: NodePort
+  selector:
+    app: view-browser
+  ports:
+  - port: 8080
+    protocol: TCP
+    name: rest
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: view-browser
+  labels:
+    app: view-browser
+spec:
+  replicas:
+    fixed: 1
+  selector:
+    matchLabels:
+      app: view-browser
+  template:
+    metadata:
+      labels:
+        app: view-browser
+    spec:
+      containers:
+      - name: view-browser
+        image: view-browser:latest
+        resources:
+          requests:
+            cpu: 500m
+            memory: 100Mi
