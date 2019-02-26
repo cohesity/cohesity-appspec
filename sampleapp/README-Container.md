@@ -105,4 +105,4 @@ viewbrowser_spec.yaml
 ``` 
 
 ## Validation by Cohesity
-Send this tar.gz package to apps@cohesity.com to get this packa validated. 
+Send this tar.gz package to developer@cohesity.com to get this package validated. 

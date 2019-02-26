@@ -26,4 +26,4 @@ go build appspecvalidator_exec.go
 
 ## Questions & Feedback
 We would love to hear from you. Please send your questions and feedback to: 
-*apps@cohesity.com*
+*developer@cohesity.com*
