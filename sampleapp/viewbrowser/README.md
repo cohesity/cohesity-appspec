@@ -57,7 +57,6 @@ appClient = CohesityAppSdk.NewAppSdkClient(appAuthenticationToken,
 ```
 App Client in action:
 ```
-//Getting App Settings.
 appSettings, err := appClient.Settings().GetAppSettings()
 ```
 
