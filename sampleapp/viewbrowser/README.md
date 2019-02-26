@@ -61,11 +61,13 @@ App Client in action:
 appSettings, err := appClient.Settings().GetAppSettings()
 ```
 
-Getting  ManagementAccessToken:
+Get ManagementAccessToken:
 ```
 managementTokenResponse, err := appClient.TokenManagement().CreateManagementAccessToken() 
-managementAccessToken.AccessToken = managementTokenResponse.AccessToken
-managementAccessToken.TokenType = managementTokenResponse.TokenType
+managementAccessToken = managementModels.AccessToken{
+  AccessToken: managementTokenResponse.AccessToken,
+  TokenType:   managementTokenResponse.TokenType,
+}
 ```
 Initializing
 ```

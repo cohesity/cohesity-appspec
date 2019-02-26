@@ -23,7 +23,7 @@ This will also get all the dependencies including Cohesity App and
 Management Go SDKs.
 
 ## Container Environment Parameters
-The App Environment Container has the following parameters initialized by 
+The App Container Environment has the following parameters initialized by 
 Cohesity App Server.
 ```
 HOST_IP  # The Host IP on which the container is running.
@@ -58,11 +58,11 @@ appClient = CohesityAppSdk.NewAppSdkClient(appAuthenticationToken,
 ```
 App Client in action:
 ```
-//Getting App Settings.
+// Get App Settings.
 appSettings, err := appClient.Settings().GetAppSettings()
 ```
 
-Getting  ManagementAccessToken:
+Get  ManagementAccessToken:
 ```
 managementTokenResponse, err := appClient.TokenManagement().CreateManagementAccessToken() 
 managementAccessToken.AccessToken = managementTokenResponse.AccessToken
