@@ -10,7 +10,7 @@ import (
   "fmt"
    "os"
 
-  "cohesity/athena/cohesity-app-spec/appspecvalidator/appspec_validator"
+  "github.com/cohesity-app-spec/tools/appspecvalidator/appspec_validator"
 )
 
 func main() {
