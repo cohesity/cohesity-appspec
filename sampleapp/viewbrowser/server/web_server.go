@@ -20,7 +20,7 @@ import (
   managementModels "github.com/cohesity/management-sdk-go/models"
   "github.com/go-martini/martini"
   "github.com/golang/glog"
-  "github.com/cohesity/cohesity-app-spec/viewbrowser/data"
+  "github.com/cohesity/cohesity-app-spec/sampleapp/viewbrowser/data"
 )
 
 var (
