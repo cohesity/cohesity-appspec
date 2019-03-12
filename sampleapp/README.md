@@ -90,7 +90,7 @@ Note:
 
 All the models for Management Structs & Variables are defined [here](https://github.com/cohesity/management-sdk-go/tree/master/models)
 
-All the models for App Structs & Variables are defined [here](https://github.com/cohesity/management-sdk-go/tree/master/models)
+All the models for App Structs & Variables are defined [here](https://github.com/cohesity/app-sdk-go/tree/master/models)
 
 
 ## Packaging the App
