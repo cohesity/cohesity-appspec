@@ -100,8 +100,7 @@ spec:
 
 Create a tarball consisting of App.json, Docker Image and AppSpec.
 ```bash
-tar cvzf view-browser.tar.gz view-browser:latest development/app.json 
-viewbrowser_spec.yaml 
+tar cvzf view-browser.tar.gz view-browser:latest development/app.json viewbrowser_spec.yaml 
 ``` 
 
 ## Validation by Cohesity
