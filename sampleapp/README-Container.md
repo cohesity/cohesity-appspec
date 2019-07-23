@@ -94,7 +94,7 @@ spec:
 }
 ```
 
-[Validating AppSpec](tools/appspecvalidator/README.md)
+[Validating AppSpec](https://github.com/cohesity/cohesity-appspec/blob/master/tools/appspecvalidator/README.md)
 
 ## Create Tarball
 
