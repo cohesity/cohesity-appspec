@@ -14,7 +14,7 @@ go get github.com/cohesity/cohesity-appspec/tools/appspecvalidator
 ## Build
 
 ```bash
-cd $GOPATH/cohesity/cohesity-appspec/tools/appspecvalidator
+cd $GOPATH/src/github.com/cohesity/cohesity-appspec/tools/appspecvalidator
 go build appspecvalidator_exec.go
 ```
 
