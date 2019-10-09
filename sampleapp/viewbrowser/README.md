@@ -13,10 +13,9 @@ and [Management](https://github.com/cohesity/management-sdk-go) Golang SDKs.
 
 ## Installation
 In order to successfully build and run Sample App, you are required to 
-have the following setup in your system: Go (Visit https://golang
-.org/doc/install for more details on how to install Go)
+have the following setup in your system: Go (Visit https://golang.org/doc/install for more details on how to install Go)
 
-```go get github.com/cohesity/cohesity-appspec/viewbrowser```
+```go get github.com/cohesity/cohesity-appspec/sampleapp/viewbrowser```
 
 This will also get all the dependencies including Cohesity App and 
 Management Go SDKs.
