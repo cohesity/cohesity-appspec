@@ -259,25 +259,33 @@ func (fs *ViewBrowserServer) BrowseFilesHandler(pathParams martini.Params,
 
   // Options to be specified for the mount api.
   mountOptions := appModels.MountOptions{
-    ViewName:      viewName,
+    ViewName:      &viewName,
     DirName:       dirName,
     MountProtocol: appModels.MountProtocol_KNFS,
     MountOptions:  &options,
   }
+  
+  createMountParams := appModels.CreateMountParams {
+    MountOptions: &mountOptions,
+  }
 
   // Api to mount the view.
-  err := appClient.Mount().CreateMount(&mountOptions)
+  err := appClient.Mount().CreateMount(&createMountParams)
   if err != nil {
     glog.Errorf(fmt.Sprint(err))
     resp.WriteHeader(http.StatusBadRequest)
     return
   }
 
+  deleteUnmountParams := appModels.DeleteUnmountParams {
+    DirName: dirName,
+  }
+
   // Try to unmount after the handler exists irrespective of whether
   // the rest of the op was successful.
   defer func() {
     // Api to unmount the view.
-    if err := appClient.Mount().DeleteUnmount(dirName); err != nil {
+    if err := appClient.Mount().DeleteUnmount(&deleteUnmountParams); err != nil {
       errMsg := "Unmount failed with error: " + err.Error()
       glog.Errorln(errMsg)
     }
