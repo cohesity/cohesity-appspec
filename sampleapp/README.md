@@ -33,6 +33,10 @@ APP_AUTHENTICATION_TOKEN # Authetication Token to make Cohesity App API calls.
 ```
 We use the above variables in various use cases to initialize and make call to  App server.
 
+## Packaging the App
+Please refer to [this](README-Container.md) section to containerize this 
+application.
+
 ## Using App & Management SDK
 The Sample App uses
 Cohesity provides [App](https://github.com/cohesity/app-sdk-go)
@@ -93,9 +97,7 @@ All the models for Management Structs & Variables are defined [here](https://git
 All the models for App Structs & Variables are defined [here](https://github.com/cohesity/app-sdk-go/tree/master/models)
 
 
-## Packaging the App
-Please refer to [this](README-Container.md) section to containerize this 
-application.
+
 ## Questions & Feedback
 We would love to hear from you. Please send your questions and feedback to: 
 *developer@cohesity.com*
