@@ -52,6 +52,7 @@ spec:
   - port: 8080
     protocol: TCP
     name: rest
+    cohesityTag: ui
 ---
 apiVersion: apps/v1
 kind: ReplicaSet
@@ -96,12 +97,14 @@ spec:
 
 [Validating AppSpec](https://github.com/cohesity/cohesity-appspec/blob/master/tools/appspecvalidator/README.md)
 
-## Create Tarball
+## Upload the app via DevPortal
 
-Create a tarball consisting of App.json, Docker Image and AppSpec.
-```bash
-tar cvzf view-browser.tar.gz view-browser:latest development/app.json viewbrowser_spec.yaml 
-``` 
+- Login to [DevPortal](devportal.cohesity.com)
 
-## Validation by Cohesity
-Send this tar.gz package to developer@cohesity.com to get this package validated. 
+- Go to Build App -> Container App
+
+- Insert all details in the form.
+
+- Upload the docker images and .yaml file.
+
+- You can submit the application for review/download the .pkg file and run it on a Cohesity cluster.

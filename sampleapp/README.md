@@ -6,6 +6,8 @@ This App runs a webserver and exposes two endpoints:
 `http://<app-ip>:<node-port>/views`  
 
 `http://<app-ip>:<node-port>/views/<view-name>`.
+
+Alternatively, one can click on the 'Open App' button from the UI to get the `<app-ip>:<node-port>` part automatically.
  
 This is to demonstrate how to write an App for Cohesity's App
 Platform. It also servers as an example for consumption of Cohesity's [App](https://github.com/cohesity/app-sdk-go)
