@@ -12,6 +12,11 @@ ADD wrapper.sh /opt/viewbrowser/bin/
 CMD ["/bin/bash", "/opt/viewbrowser/bin/wrapper.sh", "-stderrthreshold=INFO"]
 ```
 
+## Building the go binary
+```bash
+go build -o deployment/view_browser_exec view_browser_exec.go
+``` 
+
 ## Building an Image
 Build a Docker image
 ```bash
@@ -96,15 +101,3 @@ spec:
 ```
 
 [Validating AppSpec](https://github.com/cohesity/cohesity-appspec/blob/master/tools/appspecvalidator/README.md)
-
-## Upload the app via DevPortal
-
-- Login to [DevPortal](devportal.cohesity.com)
-
-- Go to Build App -> Container App
-
-- Insert all details in the form.
-
-- Upload the docker images and .yaml file.
-
-- You can submit the application for review/download the .pkg file and run it on a Cohesity cluster.

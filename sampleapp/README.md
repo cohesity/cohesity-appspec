@@ -39,6 +39,21 @@ We use the above variables in various use cases to initialize and make call to  
 Please refer to [this](README-Container.md) section to containerize this 
 application.
 
+## Uploading the App to Cohesity Marketplace
+- Login to [DevPortal](devportal.cohesity.com).
+- Go to Build App -> Container App.
+- Insert all details in the form.
+- Upload the docker images and .yaml file.
+- You can submit the application for review/download the .pkg file and run it on a Cohesity cluster.
+
+## Testing the App
+- Login to your Cohesity cluster.
+- Go to Marketplace -> My Apps.
+- Click on the Upload button (present on the top right section of the page).
+- Select the .pkg file which you got from the DevPortal.
+- Click on Upload and Install.
+- Click on the 'Run App' button will show up which will show up soon after the app installs.
+
 ## Using App & Management SDK
 The Sample App uses
 Cohesity provides [App](https://github.com/cohesity/app-sdk-go)
