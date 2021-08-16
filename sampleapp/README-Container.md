@@ -15,6 +15,10 @@ CMD ["/bin/bash", "/opt/viewbrowser/bin/wrapper.sh", "-stderrthreshold=INFO"]
 ## Building the go binary
 ```bash
 go build -o deployment/view_browser_exec view_browser_exec.go
+If this does not work. Follow below steps:-
+1. go mod init view_browser_exec (Run this command in cohesity-appspec/sampleapp/viewbrowser )
+2. go build .
+3. Copy generated view_browser_exec binary file to deployment folder
 ``` 
 
 ## Building an Image
