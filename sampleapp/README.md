@@ -21,6 +21,14 @@ After installing GO, use `go get` to install the sample app: viewbrowser:
 
 ```go get github.com/cohesity/cohesity-appspec/sampleapp/viewbrowser```
 
+```If this does not work. Follow below steps```
+```1. go mod init view_browser_exec (Run this command in cohesity-appspec/sampleapp/viewbrowser )```
+```2. go build .```
+```3. Copy generated view_browser_exec binary file to deployment folder ```
+
+
+
+
 This will also get all the dependencies including Cohesity App and 
 Management Go SDKs.
 
