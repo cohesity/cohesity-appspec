@@ -41,13 +41,13 @@ var (
 )
 
 func init() {
-  hostIp = "10.14.30.100"
+  hostIp = os.Getenv("HOST_IP")
 
-  apiEndpointIp = "10.14.30.100"
+  apiEndpointIp = os.Getenv("APPS_API_ENDPOINT_IP")
 
-  apiEndpointPort = "61004"
+  apiEndpointPort = os.Getenv("APPS_API_ENDPOINT_PORT")
 
-  appAuthenticationToken = "OtaJOtIk0WbeBETpAHUGNBexT1eInRJf2MHxXQ4bN8RRgAbQgLrqJVabmgbKIWS"
+  appAuthenticationToken = os.Getenv("APP_AUTHENTICATION_TOKEN")
 }
 
 type ViewBrowserServer struct {
