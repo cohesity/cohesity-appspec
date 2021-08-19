@@ -6,6 +6,8 @@ This App runs a webserver and exposes two endpoints:
 `http://<app-ip>:<node-port>/views`  
 
 `http://<app-ip>:<node-port>/views/<view-name>`.
+
+Alternatively, one can click on the 'Open App' button from the UI to get the `<app-ip>:<node-port>` part automatically.
  
 This is to demonstrate how to write an App for Cohesity's App
 Platform. It also servers as an example for consumption of Cohesity's [App](https://github.com/cohesity/app-sdk-go)
@@ -18,6 +20,14 @@ have the following setup in your system: [Golang](https://golang.org/doc/install
 After installing GO, use `go get` to install the sample app: viewbrowser:
 
 ```go get github.com/cohesity/cohesity-appspec/sampleapp/viewbrowser```
+
+```If this does not work. Follow below steps```
+```1. go mod init view_browser_exec (Run this command in cohesity-appspec/sampleapp/viewbrowser )```
+```2. go build .```
+```3. Copy generated view_browser_exec binary file to deployment folder ```
+
+
+
 
 This will also get all the dependencies including Cohesity App and 
 Management Go SDKs.
@@ -36,6 +46,21 @@ We use the above variables in various use cases to initialize and make call to  
 ## Packaging the App
 Please refer to [this](README-Container.md) section to containerize this 
 application.
+
+## Uploading the App to Cohesity Marketplace
+- Login to [DevPortal](devportal.cohesity.com).
+- Go to Build App -> Container App.
+- Insert all details in the form.
+- Upload the docker images and .yaml file.
+- You can submit the application for review/download the .pkg file and run it on a Cohesity cluster.
+
+## Testing the App
+- Login to your Cohesity cluster.
+- Go to Marketplace -> My Apps.
+- Click on the Upload button (present on the top right section of the page).
+- Select the .pkg file which you got from the DevPortal.
+- Click on Upload and Install.
+- Click on the 'Run App' button will show up which will show up soon after the app installs.
 
 ## Using App & Management SDK
 The Sample App uses

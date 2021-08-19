@@ -12,6 +12,15 @@ ADD wrapper.sh /opt/viewbrowser/bin/
 CMD ["/bin/bash", "/opt/viewbrowser/bin/wrapper.sh", "-stderrthreshold=INFO"]
 ```
 
+## Building the go binary
+```bash
+go build -o deployment/view_browser_exec view_browser_exec.go
+If this does not work. Follow below steps:-
+1. go mod init view_browser_exec (Run this command in cohesity-appspec/sampleapp/viewbrowser )
+2. go build .
+3. Copy generated view_browser_exec binary file to deployment folder
+``` 
+
 ## Building an Image
 Build a Docker image
 ```bash
@@ -52,6 +61,7 @@ spec:
   - port: 8080
     protocol: TCP
     name: rest
+    cohesityTag: ui
 ---
 apiVersion: apps/v1
 kind: ReplicaSet
@@ -95,13 +105,3 @@ spec:
 ```
 
 [Validating AppSpec](https://github.com/cohesity/cohesity-appspec/blob/master/tools/appspecvalidator/README.md)
-
-## Create Tarball
-
-Create a tarball consisting of App.json, Docker Image and AppSpec.
-```bash
-tar cvzf view-browser.tar.gz view-browser:latest development/app.json viewbrowser_spec.yaml 
-``` 
-
-## Validation by Cohesity
-Send this tar.gz package to developer@cohesity.com to get this package validated. 
