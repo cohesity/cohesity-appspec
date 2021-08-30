@@ -21,11 +21,14 @@ After installing GO, use `go get` to install the sample app: viewbrowser:
 
 ```go get github.com/cohesity/cohesity-appspec/sampleapp/viewbrowser```
 
-```If this does not work. Follow below steps```
-```1. go mod init view_browser_exec (Run this command in cohesity-appspec/sampleapp/viewbrowser )```
-```2. go build .```
-```3. Copy generated view_browser_exec binary file to deployment folder ```
-
+If this does not work. Follow below steps
+```
+(Run this command in cohesity-appspec/sampleapp/viewbrowser). Do not change module name.
+1. go mod init github.com/cohesity/cohesity-appspec/sampleapp/viewbrowser
+2. go build .
+3. Copy generated viewbrowser binary file to deployment folder
+4. Change the name of the binary inside deployment to view_browser_exec
+```
 
 
 
