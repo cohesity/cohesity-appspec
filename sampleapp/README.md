@@ -30,10 +30,20 @@ If this does not work. Follow below steps
 4. Change the name of the binary inside deployment to view_browser_exec
 ```
 
-
-
 This will also get all the dependencies including Cohesity App and 
 Management Go SDKs.
+
+## Modifying and Updating the App
+If you make any changes to the source code, you can rebuild the binaries and docker image with the script `install.sh` inside viewbrowser folder.
+
+Even if you are building it for the first time, the script would generate the docker images for you. To run the script, 
+
+```
+1. Modify the top line of the script to reflect the correct path of the view browser app.
+2. Make the script executable using "chmod +x script.sh". (Only needed once).
+3. Run the script using "./install.sh" from the corresponding folder.
+4. Your final docker image would then be saved inside the "deployment" folder by the name "view-browser:latest"
+```
 
 ## Container Environment Parameters
 The App Container Environment has the following parameters initialized by 
