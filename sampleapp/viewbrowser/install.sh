@@ -1,20 +1,11 @@
 # Change the directory to the required location
-cd ~/workspace/cohesity-appsec-new/cohesity-appspec/sampleapp/viewbrowser  
+cd ~/temp/cohesity-appspec/sampleapp/viewbrowser  
 echo "Switched to the View Browser Directory"
 
-rm go.mod go.sum viewbrowser
-echo "Removed the existing binaries and modules"
-
-go mod init github.com/cohesity/cohesity-appspec/sampleapp/viewbrowser
-echo "Created Go modules"
-
-go get -v 
-echo "Downloaded all dependencies"
-
-go build .
+go build -o view_browser_exec .
 echo "Built the Go binary"
 
-cp viewbrowser deployment/view_browser_exec
+cp view_browser_exec deployment/view_browser_exec
 echo "Copied the binary to the view browser folder"
 
 cd deployment
