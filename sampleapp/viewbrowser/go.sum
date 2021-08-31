@@ -1,0 +1,14 @@
+github.com/apimatic/form v0.0.0-20160503070951-57699fab37f4 h1:H14RNDBXMLIy2vML4QC8jzzi0hwiiiq3w4n8ePxXDY4=
+github.com/apimatic/form v0.0.0-20160503070951-57699fab37f4/go.mod h1:UjJSEhRLclWeKGd5hpGAljQDx/lSLGK0rW8PM50RPCM=
+github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0 h1:sDMmm+q/3+BukdIpxwO365v/Rbspp2Nt5XntgQRXq8Q=
+github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0/go.mod h1:4Zcjuz89kmFXt9morQgcfYZAYZ5n8WHjt81YYWIwtTM=
+github.com/cohesity/app-sdk-go v0.0.0-20190722230114-5dbb9337cc19 h1:3Wk/wxPgBbrx+a9TWS/HKMnIf4SopRpjHc6WSVZGHhI=
+github.com/cohesity/app-sdk-go v0.0.0-20190722230114-5dbb9337cc19/go.mod h1:xQlEJfpO+WnAvNpgFdp3Ppmdynuaix2H9X+/lKg6lb8=
+github.com/cohesity/management-sdk-go v0.0.0-20210611183926-ee285b549580 h1:r/UbLeGo/EvOaN0ZTI6FKgZY5MjnKTwPUSkJwgGUPc8=
+github.com/cohesity/management-sdk-go v0.0.0-20210611183926-ee285b549580/go.mod h1:6x1vvGzN4NCabZQRpYjS72BNjqtDWGCbklGrGbmhAXQ=
+github.com/go-martini/martini v0.0.0-20170121215854-22fa46961aab h1:xveKWz2iaueeTaUgdetzel+U7exyigDYBryyVfV/rZk=
+github.com/go-martini/martini v0.0.0-20170121215854-22fa46961aab/go.mod h1:/P9AEU963A2AYjv4d1V5eVL1CQbEJq6aCNHDDjibzu8=
+github.com/golang/glog v1.0.0 h1:nfP3RFugxnNRyKgeWd4oI1nYvXpxrx8ck8ZrcizshdQ=
+github.com/golang/glog v1.0.0/go.mod h1:EWib/APOK0SL3dFbYqvxE3UYd8E6s1ouQ7iEp/0LWV4=
+github.com/satori/go.uuid v1.2.0 h1:0uYX9dsZ2yD7q2RtLRtPSdGDWzjeM3TbMJP9utgA0ww=
+github.com/satori/go.uuid v1.2.0/go.mod h1:dA0hQrYB0VpLJoorglMZABFdXlWrHn1NEOzdhQKdks0=

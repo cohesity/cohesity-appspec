@@ -17,20 +17,26 @@ and [Management](https://github.com/cohesity/management-sdk-go) Golang SDKs.
 In order to successfully build and run Sample App, you are required to 
 have the following setup in your system: [Golang](https://golang.org/doc/install)
 
-After installing GO, use `go get` to install the sample app: viewbrowser:
-
-```go get github.com/cohesity/cohesity-appspec/sampleapp/viewbrowser```
-
-```If this does not work. Follow below steps```
-```1. go mod init view_browser_exec (Run this command in cohesity-appspec/sampleapp/viewbrowser )```
-```2. go build .```
-```3. Copy generated view_browser_exec binary file to deployment folder ```
-
-
-
+To install the app, follow below steps
+```
+1. go build -o view_browser_exec. (Execute this command from the viewbrowser folder)
+2. Copy generated view_browser_exec binary file to deployment folder
+```
 
 This will also get all the dependencies including Cohesity App and 
 Management Go SDKs.
+
+## Modifying and Updating the App
+If you make any changes to the source code, you can rebuild the binaries and docker image with the script `install.sh` inside viewbrowser folder.
+
+Even if you are building it for the first time, the script would generate the docker images for you. To run the script, 
+
+```
+1. Modify the top line of the script to reflect the correct path of the view browser app.
+2. Make the script executable using "chmod +x script.sh". (Only needed once).
+3. Run the script using "./install.sh" from the corresponding folder.
+4. Your final docker image would then be saved inside the "deployment" folder by the name "view-browser:latest"
+```
 
 ## Container Environment Parameters
 The App Container Environment has the following parameters initialized by 
